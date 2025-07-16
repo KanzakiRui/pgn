@@ -13,7 +13,7 @@ import gradio as gr
 # ------------------------------------------------------------------
 # 0.  Paths & logging (reuse the original .cache folder)
 # ------------------------------------------------------------------
-CACHE_DIR = Path(shared.script_path) / "extensions" / "sd-webui-pinggy" / ".cache"
+CACHE_DIR = Path(shared.script_path) / "extensions" / "pgn" / ".cache"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
@@ -78,7 +78,7 @@ def _monitor():
             for url in _find_urls(txt):
                 global _shown_once
                 if not _shown_once:               # only print once
-                    print(f"\n🚀  Pinggy tunnel ready: {url}\n")
+                    print(f"\nPinggy tunnel ready: {url}\n")
                     _shown_once = True
         except Exception:
             pass
