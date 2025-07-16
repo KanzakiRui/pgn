@@ -104,4 +104,7 @@ def _init():
     threading.Thread(target=_monitor, daemon=True).start()
 
 # Register the callback as soon as the script is imported
-script_callbacks.on_app_started(lambda _: _init())
+def _on_app_started(demo, app):
+    _init()
+
+script_callbacks.on_app_started(_on_app_started)
