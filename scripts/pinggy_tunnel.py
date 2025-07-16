@@ -1,6 +1,3 @@
-"""
-Pinggy SSH tunnel extension for REFOREGE/FORGE WebUI
-"""
 import os
 import re
 import time
@@ -10,9 +7,6 @@ from pathlib import Path
 from modules import shared, script_callbacks, scripts
 import gradio as gr
 
-# ------------------------------------------------------------------
-# 0.  Paths & logging (reuse the original .cache folder)
-# ------------------------------------------------------------------
 CACHE_DIR = Path(shared.script_path) / "extensions" / "pgn" / ".cache"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -22,9 +16,6 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-# ------------------------------------------------------------------
-# 1.  Small helpers (copied from tunnel_v4.py, trimmed)
-# ------------------------------------------------------------------
 ANSI = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
 CTRL  = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]')
 
@@ -42,9 +33,6 @@ def _find_urls(text: str):
         hits.extend(re.findall(p, text))
     return list(dict.fromkeys(hits))   # unique in order
 
-# ------------------------------------------------------------------
-# 2.  Start tunnel in a background thread
-# ------------------------------------------------------------------
 _tunnel_proc = None        # global to avoid duplicate processes
 
 def _start_tunnel():
@@ -64,9 +52,6 @@ def _start_tunnel():
     logging.info(f"Starting tunnel on port {port}")
     _tunnel_proc = subprocess.Popen(cmd, shell=True)
 
-# ------------------------------------------------------------------
-# 3.  Poll .cache/url.txt and print any discovered URL(s)
-# ------------------------------------------------------------------
 _shown_once = False
 
 def _monitor():
@@ -82,23 +67,13 @@ def _monitor():
                     _shown_once = True
         except Exception:
             pass
-# ------------------------------------------------------------------
-# 4.  Hook into WebUI
-# ------------------------------------------------------------------
+
 class PinggyScript(scripts.Script):
     def title(self):
         return "Pinggy tunnel"
 
     def show(self, is_img2img):
-        return scripts.AlwaysVisible
-
-    def ui(self, is_img2img):
-        # Add a small “Start tunnel” button (purely cosmetic; auto-starts anyway)
-        with gr.Group():
-            with gr.Row():
-                btn = gr.Button("Start / restart Pinggy tunnel", variant="primary")
-                btn.click(fn=_start_tunnel, inputs=[], outputs=[])
-        return []
+        return scripts.NeverVisible
 
 def _init():
     _start_tunnel()
