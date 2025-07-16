@@ -1,5 +1,5 @@
 """
-Pinggy SSH tunnel extension for AUTOMATIC1111 WebUI
+Pinggy SSH tunnel extension for REFOREGE/FORGE WebUI
 """
 import os
 import re
@@ -57,7 +57,7 @@ def _start_tunnel():
     port = shared.cmd_opts.port if shared.cmd_opts.port else 7860
     output_file = CACHE_DIR / "url.txt"
     cmd = (
-        f'ssh -o StrictHostKeyChecking=no -p 80 '
+        f'sshpass -p 0000 -o StrictHostKeyChecking=no -p 80 '
         f'-R0:localhost:{port} auth@a.pinggy.io > {output_file}'
     )
 
