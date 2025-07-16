@@ -67,6 +67,8 @@ def _start_tunnel():
 # ------------------------------------------------------------------
 # 3.  Poll .cache/url.txt and print any discovered URL(s)
 # ------------------------------------------------------------------
+_shown_once = False
+
 def _monitor():
     output_file = CACHE_DIR / "url.txt"
     while True:
@@ -74,12 +76,12 @@ def _monitor():
         try:
             txt = _clean(open(output_file).read())
             for url in _find_urls(txt):
-                print(f"\n🚀  Pinggy tunnel ready: {url}\n")
-                # Once we have at least one URL we can slow polling down
-                time.sleep(30)
+                global _shown_once
+                if not _shown_once:               # only print once
+                    print(f"\n🚀  Pinggy tunnel ready: {url}\n")
+                    _shown_once = True
         except Exception:
             pass
-
 # ------------------------------------------------------------------
 # 4.  Hook into WebUI
 # ------------------------------------------------------------------
