@@ -73,8 +73,8 @@ class PinggyScript(scripts.Script):
         return "Pinggy tunnel"
 
     def show(self, is_img2img):
-        return scripts.NeverVisible
-
+        return False
+        
 def _init():
     _start_tunnel()
     import threading
